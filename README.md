@@ -1252,4 +1252,1861 @@ while len(guessed_states) < 50:
         writer.write(answer_state, align="center", font=FONT)
  
 screen.exitonclick()
-</pre></pre>code>
+
+Day of Code 26 
+
+<pre><code>import pandas
+
+data = pandas.read_csv("nato_phonetic_alphabet.csv")
+
+phonetic_dict = {
+    row.letter: row.code
+    for (index, row) in data.iterrows()
+}
+
+word = input("Enter a word: ").upper()
+
+try:
+    output_list = [
+        phonetic_dict[letter]
+        for letter in word
+    ]
+except KeyError:
+    print("Sorry, only letters in the alphabet please.")
+else:
+    print(output_list)</pre></code>
+
+Day of Code 27
+
+<pre><code>from tkinter import *
+
+# Window setup
+window = Tk()
+window.title("Miles to Km Converter")
+window.minsize(width=300, height=150)
+window.config(padx=20, pady=20)
+
+# Convert miles to kilometers
+def calculate():
+    miles = float(miles_input.get())
+    km = miles * 1.60934
+    result_label.config(text=f"{km:.2f}")
+
+# Input field
+miles_input = Entry(width=10)
+miles_input.grid(column=1, row=0)
+
+# Labels
+miles_label = Label(text="Miles")
+miles_label.grid(column=2, row=0)
+
+equal_label = Label(text="is equal to")
+equal_label.grid(column=0, row=1)
+
+result_label = Label(text="0")
+result_label.grid(column=1, row=1)
+
+km_label = Label(text="Km")
+km_label.grid(column=2, row=1)
+
+# Calculate button
+calculate_button = Button(
+    text="Calculate",
+    command=calculate
+)
+calculate_button.grid(column=1, row=2)
+
+window.mainloop()</code></pre>
+
+Day of Code 28
+
+<pre><code>import tkinter as tk
+
+# ---------------------------- CONSTANTS ------------------------------- #
+PINK = "#e2979c"
+RED = "#e7305b"
+GREEN = "#9bdeac"
+YELLOW = "#f7f5dd"
+FONT_NAME = "Courier"
+WORK_MIN = 25
+SHORT_BREAK_MIN = 5
+LONG_BREAK_MIN = 20
+reps = 0
+timer = None
+
+# ---------------------------- TIMER RESET ------------------------------- #
+def reset_timer():
+    global reps, timer
+
+    if timer is not None:
+        window.after_cancel(timer)
+        timer = None
+
+    reps = 0
+    canvas.itemconfig(timer_text, text="00:00")
+    title_label.config(text="Timer", fg=GREEN)
+    check_marks.config(text="")
+
+# ---------------------------- TIMER MECHANISM ------------------------------- #
+def start_timer():
+    global reps
+
+    reps += 1
+
+    work_seconds = WORK_MIN * 60
+    short_break_seconds = SHORT_BREAK_MIN * 60
+    long_break_seconds = LONG_BREAK_MIN * 60
+
+    if reps % 8 == 0:
+        count_down(long_break_seconds)
+        title_label.config(text="Break", fg=RED)
+    elif reps % 2 == 0:
+        count_down(short_break_seconds)
+        title_label.config(text="Break", fg=PINK)
+    else:
+        count_down(work_seconds)
+        title_label.config(text="Work", fg=GREEN)
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+def count_down(count):
+    global timer
+
+    minutes = count // 60
+    seconds = count % 60
+
+    canvas.itemconfig(
+        timer_text,
+        text=f"{minutes:02d}:{seconds:02d}"
+    )
+
+    if count > 0:
+        timer = window.after(
+            1000,
+            count_down,
+            count - 1
+        )
+    else:
+        start_timer_button.config(state="normal")
+
+        if reps % 2 == 1:
+            check_marks.config(
+                text=check_marks.cget("text") + "✓"
+            )
+
+        start_timer()
+
+
+# ---------------------------- UI SETUP ------------------------------- #
+window = tk.Tk()
+window.title("Pomodoro")
+window.config(padx=100, pady=50, bg=YELLOW)
+
+title_label = tk.Label(
+    text="Timer",
+    fg=GREEN,
+    bg=YELLOW,
+    font=(FONT_NAME, 50)
+)
+title_label.grid(column=1, row=0)
+
+canvas = tk.Canvas(
+    width=200,
+    height=224,
+    bg=YELLOW,
+    highlightthickness=0
+)
+
+# Simple timer illustration
+canvas.create_oval(
+    25, 25, 175, 175,
+    fill=GREEN,
+    outline=GREEN
+)
+
+timer_text = canvas.create_text(
+    100, 100,
+    text="00:00",
+    fill="white",
+    font=(FONT_NAME, 30, "bold")
+)
+
+canvas.grid(column=1, row=1)
+
+start_timer_button = tk.Button(
+    text="Start",
+    command=lambda: [
+        start_timer_button.config(state="disabled"),
+        start_timer()
+    ]
+)
+start_timer_button.grid(column=0, row=2)
+
+reset_button = tk.Button(
+    text="Reset",
+    command=reset_timer
+)
+reset_button.grid(column=2, row=2)
+
+check_marks = tk.Label(
+    fg=GREEN,
+    bg=YELLOW,
+    font=(FONT_NAME, 16)
+)
+check_marks.grid(column=1, row=3)
+
+window.mainloop()</code></pre>
+
+Day 29 of Code
+
+<pre><code>from tkinter import *
+from tkinter import messagebox
+from random import choice, randint, shuffle
+import string
+
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def generate_password():
+    letters = string.ascii_letters
+    numbers = string.digits
+    symbols = "!#$%&()*+"
+
+    password_list = (
+        [choice(letters) for _ in range(randint(8, 10))]
+        + [choice(numbers) for _ in range(randint(2, 4))]
+        + [choice(symbols) for _ in range(randint(2, 4))]
+    )
+
+    shuffle(password_list)
+    password = "".join(password_list)
+
+    password_entry.delete(0, END)
+    password_entry.insert(0, password)
+
+    # Copy generated password to clipboard
+    window.clipboard_clear()
+    window.clipboard_append(password)
+
+
+# ---------------------------- SAVE PASSWORD ------------------------------- #
+
+def save_password():
+    website = website_entry.get().strip()
+    email = email_entry.get().strip()
+    password = password_entry.get().strip()
+
+    if not website or not email or not password:
+        messagebox.showwarning(
+            title="Missing information",
+            message="Please don't leave any fields empty!"
+        )
+        return
+
+    is_ok = messagebox.askyesno(
+        title="Confirm",
+        message=f"Website: {website}\n"
+                f"Email: {email}\n"
+                f"Password: {password}\n\n"
+                f"Is this information correct?"
+    )
+
+    if is_ok:
+        try:
+            with open("data.txt", "a", encoding="utf-8") as file:
+                file.write(
+                    f"{website} | {email} | {password}\n"
+                )
+        except OSError:
+            messagebox.showerror(
+                title="Error",
+                message="Could not save the information."
+            )
+            return
+
+        website_entry.delete(0, END)
+        password_entry.delete(0, END)
+        website_entry.focus()
+
+        messagebox.showinfo(
+            title="Success",
+            message="Your information has been saved!"
+        )
+
+
+# ---------------------------- UI SETUP ------------------------------- #
+
+window = Tk()
+window.title("Password Manager")
+window.config(padx=50, pady=50)
+
+# Canvas / Logo
+canvas = Canvas(width=200, height=200, highlightthickness=0)
+canvas.grid(column=1, row=0)
+
+# Simple lock illustration
+canvas.create_oval(
+    65, 25, 135, 95,
+    outline="#333333",
+    width=5
+)
+canvas.create_rectangle(
+    50, 70, 150, 150,
+    fill="#e7b34b",
+    outline="#333333",
+    width=3
+)
+canvas.create_oval(
+    92, 92, 108, 108,
+    fill="#333333"
+)
+canvas.create_rectangle(
+    97, 103, 103, 123,
+    fill="#333333",
+    outline="#333333"
+)
+
+# Website
+website_label = Label(text="Website:")
+website_label.grid(column=0, row=1, sticky="w")
+
+website_entry = Entry(width=35)
+website_entry.grid(column=1, row=1, columnspan=2, sticky="w")
+website_entry.focus()
+
+# Email / Username
+email_label = Label(text="Email/Username:")
+email_label.grid(column=0, row=2, sticky="w")
+
+email_entry = Entry(width=35)
+email_entry.grid(column=1, row=2, columnspan=2, sticky="w")
+email_entry.insert(0, "example@email.com")
+
+# Password
+password_label = Label(text="Password:")
+password_label.grid(column=0, row=3, sticky="w")
+
+password_entry = Entry(width=21)
+password_entry.grid(column=1, row=3, sticky="w")
+
+# Generate password button
+generate_button = Button(
+    text="Generate Password",
+    command=generate_password
+)
+generate_button.grid(column=2, row=3, sticky="w")
+
+# Add password button
+add_button = Button(
+    text="Add",
+    width=30,
+    command=save_password
+)
+add_button.grid(column=1, row=4, columnspan=2, sticky="w")
+
+window.mainloop()</code></pre>
+
+Day 30 of Code
+
+<pre><code>from tkinter import *
+from tkinter import messagebox
+from random import choice, randint, shuffle
+import string
+import json
+
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def generate_password():
+    letters = string.ascii_letters
+    numbers = string.digits
+    symbols = "!#$%&()*+"
+
+    password_list = (
+        [choice(letters) for _ in range(randint(8, 10))]
+        + [choice(numbers) for _ in range(randint(2, 4))]
+        + [choice(symbols) for _ in range(randint(2, 4))]
+    )
+
+    shuffle(password_list)
+    password = "".join(password_list)
+
+    password_entry.delete(0, END)
+    password_entry.insert(0, password)
+
+    window.clipboard_clear()
+    window.clipboard_append(password)
+
+
+# ---------------------------- SAVE PASSWORD ------------------------------- #
+
+def save_password():
+    website = website_entry.get().strip()
+    email = email_entry.get().strip()
+    password = password_entry.get().strip()
+
+    if not website or not email or not password:
+        messagebox.showwarning(
+            title="Missing information",
+            message="Please fill in all fields."
+        )
+        return
+
+    new_data = {
+        website: {
+            "email": email,
+            "password": password
+        }
+    }
+
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+    except FileNotFoundError:
+        data = {}
+
+    except json.JSONDecodeError:
+        messagebox.showerror(
+            title="Error",
+            message="The data file is invalid. "
+                    "Please check data.json before saving."
+        )
+        return
+
+    # Update existing data or add a new website
+    data.update(new_data)
+
+    try:
+        with open("data.json", "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4)
+
+    except OSError:
+        messagebox.showerror(
+            title="Error",
+            message="Could not save your data."
+        )
+        return
+
+    website_entry.delete(0, END)
+    password_entry.delete(0, END)
+
+    messagebox.showinfo(
+        title="Success",
+        message=f"Details saved for {website}."
+    )
+
+
+# ---------------------------- FIND PASSWORD ------------------------------- #
+
+def find_password():
+    website = website_entry.get().strip()
+
+    if not website:
+        messagebox.showwarning(
+            title="Missing website",
+            message="Please enter a website to search for."
+        )
+        return
+
+    try:
+        with open("data.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+    except FileNotFoundError:
+        messagebox.showerror(
+            title="No data",
+            message="No saved passwords file was found."
+        )
+        return
+
+    except json.JSONDecodeError:
+        messagebox.showerror(
+            title="Error",
+            message="The data file contains invalid JSON."
+        )
+        return
+
+    if website in data:
+        details = data[website]
+
+        messagebox.showinfo(
+            title=website,
+            message=(
+                f"Email: {details['email']}\n"
+                f"Password: {details['password']}"
+            )
+        )
+    else:
+        messagebox.showinfo(
+            title="Not found",
+            message=f"No details for {website} were found."
+        )
+
+
+# ---------------------------- UI SETUP ------------------------------- #
+
+window = Tk()
+window.title("Password Manager")
+window.config(padx=40, pady=40)
+
+# Logo
+canvas = Canvas(width=180, height=180, highlightthickness=0)
+canvas.grid(column=1, row=0)
+
+canvas.create_oval(
+    55, 20, 125, 90,
+    outline="#333333",
+    width=5
+)
+canvas.create_rectangle(
+    40, 65, 140, 145,
+    fill="#e7b34b",
+    outline="#333333",
+    width=3
+)
+canvas.create_oval(82, 88, 98, 104, fill="#333333")
+canvas.create_rectangle(
+    88, 101, 92, 122,
+    fill="#333333"
+)
+
+# Website
+Label(text="Website:").grid(
+    column=0, row=1, sticky="w"
+)
+
+website_entry = Entry(width=22)
+website_entry.grid(
+    column=1, row=1, sticky="w"
+)
+website_entry.focus()
+
+search_button = Button(
+    text="Search",
+    width=12,
+    command=find_password
+)
+search_button.grid(column=2, row=1, sticky="w")
+
+# Email
+Label(text="Email/Username:").grid(
+    column=0, row=2, sticky="w"
+)
+
+email_entry = Entry(width=38)
+email_entry.grid(
+    column=1, row=2, columnspan=2, sticky="w"
+)
+email_entry.insert(0, "example@email.com")
+
+# Password
+Label(text="Password:").grid(
+    column=0, row=3, sticky="w"
+)
+
+password_entry = Entry(width=22)
+password_entry.grid(
+    column=1, row=3, sticky="w"
+)
+
+generate_button = Button(
+    text="Generate Password",
+    command=generate_password
+)
+generate_button.grid(
+    column=2, row=3, sticky="w"
+)
+
+# Add button
+add_button = Button(
+    text="Add",
+    width=33,
+    command=save_password
+)
+add_button.grid(
+    column=1, row=4, columnspan=2, sticky="w"
+)
+
+window.mainloop()</code></pre>
+
+Day 31 of Code
+
+<pre><code>
+import tkinter as tk
+import pandas as pd
+import random
+from pathlib import Path
+
+# ---------------------------- CONSTANTS ------------------------------- #
+
+BACKGROUND_COLOR = "#B1DDC6"
+CARD_COLOR = "#FFFFFF"
+TITLE_COLOR = "#2C3E50"
+
+DATA_FILE = Path("french_words.csv")
+PROGRESS_FILE = Path("words_to_learn.csv")
+
+# Sample vocabulary created automatically if no CSV exists
+SAMPLE_WORDS = [
+    {"French": "partie", "English": "part"},
+    {"French": "histoire", "English": "history"},
+    {"French": "chercher", "English": "to look for"},
+    {"French": "seulement", "English": "only"},
+    {"French": "vraiment", "English": "really"},
+    {"French": "apprendre", "English": "to learn"},
+    {"French": "comprendre", "English": "to understand"},
+    {"French": "toujours", "English": "always"},
+    {"French": "ensemble", "English": "together"},
+    {"French": "réponse", "English": "answer"},
+    {"French": "question", "English": "question"},
+    {"French": "maison", "English": "house"},
+    {"French": "livre", "English": "book"},
+    {"French": "eau", "English": "water"},
+    {"French": "bonjour", "English": "hello"},
+]
+
+# ---------------------------- LOAD DATA ------------------------------- #
+
+if not DATA_FILE.exists():
+    pd.DataFrame(SAMPLE_WORDS).to_csv(DATA_FILE, index=False)
+
+if PROGRESS_FILE.exists():
+    try:
+        data = pd.read_csv(PROGRESS_FILE).dropna()
+        if not {"French", "English"}.issubset(data.columns):
+            raise ValueError("Invalid vocabulary file")
+    except (pd.errors.EmptyDataError, ValueError):
+        data = pd.read_csv(DATA_FILE).dropna()
+else:
+    data = pd.read_csv(DATA_FILE).dropna()
+
+data = data.reset_index(drop=True)
+current_card = {}
+flip_timer = None
+
+# ---------------------------- NEXT CARD ------------------------------- #
+
+def next_card():
+    global current_card, flip_timer
+
+    if flip_timer is not None:
+        window.after_cancel(flip_timer)
+        flip_timer = None
+
+    if data.empty:
+        canvas.config(bg=CARD_COLOR)
+        canvas.delete("all")
+        canvas.create_text(
+            300, 150,
+            text="Congratulations!\nYou learned all the words!",
+            font=("Arial", 24, "bold"),
+            fill=TITLE_COLOR,
+            justify="center"
+        )
+        return
+
+    current_card = data.iloc[random.randrange(len(data))].to_dict()
+
+    canvas.config(bg=CARD_COLOR)
+    canvas.delete("all")
+
+    canvas.create_text(
+        300, 60,
+        text="French",
+        font=("Arial", 24, "italic"),
+        fill=TITLE_COLOR
+    )
+
+    canvas.create_text(
+        300, 150,
+        text=current_card["French"],
+        font=("Arial", 38, "bold"),
+        fill=TITLE_COLOR,
+        width=500
+    )
+
+    flip_timer = window.after(3000, flip_card)
+
+# ---------------------------- FLIP CARD ------------------------------- #
+
+def flip_card():
+    global flip_timer
+    flip_timer = None
+
+    canvas.config(bg="#91C8F0")
+    canvas.delete("all")
+
+    canvas.create_text(
+        300, 60,
+        text="English",
+        font=("Arial", 24, "italic"),
+        fill="white"
+    )
+
+    canvas.create_text(
+        300, 150,
+        text=current_card["English"],
+        font=("Arial", 34, "bold"),
+        fill="white",
+        width=500
+    )
+
+# ---------------------------- KNOWN WORD ------------------------------- #
+
+def known_word():
+    global data
+
+    if not current_card or data.empty:
+        return
+
+    # Remove the learned word from the remaining vocabulary
+    data = data[
+        data["French"] != current_card["French"]
+    ].reset_index(drop=True)
+
+    # Save progress so learned words won't appear again
+    data.to_csv(PROGRESS_FILE, index=False)
+
+    next_card()
+
+# ---------------------------- UI SETUP ------------------------------- #
+
+window = tk.Tk()
+window.title("French Flash Cards")
+window.config(bg=BACKGROUND_COLOR, padx=40, pady=30)
+
+title_label = tk.Label(
+    window,
+    text="French Flash Cards",
+    font=("Arial", 28, "bold"),
+    bg=BACKGROUND_COLOR,
+    fg=TITLE_COLOR
+)
+title_label.pack(pady=(0, 20))
+
+canvas = tk.Canvas(
+    width=600,
+    height=300,
+    bg=CARD_COLOR,
+    highlightthickness=0
+)
+canvas.pack(pady=10)
+
+button_frame = tk.Frame(window, bg=BACKGROUND_COLOR)
+button_frame.pack(pady=20)
+
+unknown_button = tk.Button(
+    button_frame,
+    text="❌ Don't Know",
+    font=("Arial", 14),
+    command=next_card,
+    padx=15,
+    pady=10
+)
+unknown_button.grid(row=0, column=0, padx=15)
+
+known_button = tk.Button(
+    button_frame,
+    text="✅ I Know This",
+    font=("Arial", 14),
+    command=known_word,
+    padx=15,
+    pady=10
+)
+known_button.grid(row=0, column=1, padx=15)
+
+next_card()
+
+window.mainloop()
+</code></pre>
+
+Day 32 of Code
+
+<pre><code>
+import os
+import csv
+import random
+import smtplib
+from datetime import datetime
+from pathlib import Path
+from email.message import EmailMessage
+
+# ---------------------------- SETTINGS ------------------------------- #
+
+DATA_FILE = Path("birthdays.csv")
+
+# Set these as environment variables before running the program.
+MY_EMAIL = os.getenv("MY_EMAIL")
+MY_PASSWORD = os.getenv("MY_PASSWORD")
+
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 465
+
+# ---------------------------- EMAIL TEMPLATES ------------------------------- #
+
+LETTER_TEMPLATES = [
+    """Subject: Happy Birthday!
+
+Dear [NAME],
+
+Happy Birthday! 🎉
+
+I hope your special day is full of happiness, laughter,
+and wonderful memories.
+
+Wishing you an amazing year ahead!
+
+Best wishes,
+Your Birthday Bot
+""",
+    """Subject: Wishing You a Wonderful Birthday!
+
+Dear [NAME],
+
+Many happy returns of the day!
+
+May your birthday bring you lots of joy and success.
+Have a fantastic celebration!
+
+Best,
+Your Birthday Bot
+""",
+    """Subject: It's Your Special Day!
+
+Dear [NAME],
+
+Happy Birthday! 🎂
+
+I hope this new year of your life brings you exciting
+opportunities, good health, and plenty of reasons to smile.
+
+Enjoy your special day!
+
+Warm wishes,
+Your Birthday Bot
+"""
+]
+
+# ---------------------------- CHECK BIRTHDAYS ------------------------------- #
+
+def get_todays_birthdays():
+    today = datetime.now()
+
+    if not DATA_FILE.exists():
+        print("Error: birthdays.csv was not found.")
+        return []
+
+    birthdays = []
+
+    try:
+        with DATA_FILE.open(
+            "r", newline="", encoding="utf-8"
+        ) as file:
+            reader = csv.DictReader(file)
+
+            required_columns = {"name", "email", "year", "month", "day"}
+
+            if not required_columns.issubset(reader.fieldnames or []):
+                print(
+                    "Error: CSV needs these columns: "
+                    "name, email, year, month, day"
+                )
+                return []
+
+            for row in reader:
+                try:
+                    birthday_month = int(row["month"])
+                    birthday_day = int(row["day"])
+
+                    if (
+                        birthday_month == today.month
+                        and birthday_day == today.day
+                    ):
+                        birthdays.append(row)
+
+                except (ValueError, TypeError):
+                    print(f"Skipping invalid birthday entry: {row}")
+
+    except OSError as error:
+        print(f"Could not read birthday file: {error}")
+
+    return birthdays
+
+# ---------------------------- CREATE EMAIL ------------------------------- #
+
+def create_birthday_email(name):
+    template = random.choice(LETTER_TEMPLATES)
+
+    subject, body = template.split("\n", 1)
+    subject = subject.replace("Subject: ", "").strip()
+    body = body.replace("[NAME]", name)
+
+    message = EmailMessage()
+    message["From"] = MY_EMAIL
+    message["Subject"] = subject
+    message.set_content(body)
+
+    return message
+
+# ---------------------------- SEND EMAIL ------------------------------- #
+
+def send_birthday_email(person):
+    if not MY_EMAIL or not MY_PASSWORD:
+        print(
+            "Email credentials are missing. "
+            "Set MY_EMAIL and MY_PASSWORD first."
+        )
+        return False
+
+    message = create_birthday_email(person["name"])
+    message["To"] = person["email"]
+
+    try:
+        with smtplib.SMTP_SSL(
+            SMTP_SERVER, SMTP_PORT, timeout=20
+        ) as connection:
+            connection.login(MY_EMAIL, MY_PASSWORD)
+            connection.send_message(message)
+
+        print(f"Birthday email sent to {person['name']}!")
+        return True
+
+    except (smtplib.SMTPException, OSError) as error:
+        print(f"Could not email {person['name']}: {error}")
+        return False
+
+# ---------------------------- MAIN PROGRAM ------------------------------- #
+
+def main():
+    birthdays = get_todays_birthdays()
+
+    if not birthdays:
+        print("No birthdays found for today.")
+        return
+
+    for person in birthdays:
+        send_birthday_email(person)
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+
+Day of Code 33
+
+<pre><code>
+import os
+import smtplib
+import requests
+from datetime import datetime
+from email.message import EmailMessage
+from time import sleep
+
+# ---------------------------- YOUR LOCATION ---------------------------- #
+
+MY_LAT = 28.1235       # Replace with your latitude
+MY_LONG = -15.4363     # Replace with your longitude
+
+# Email settings: configure these as environment variables
+MY_EMAIL = os.getenv("MY_EMAIL")
+MY_PASSWORD = os.getenv("MY_PASSWORD")
+
+# ---------------------------- CHECK ISS POSITION ---------------------------- #
+
+def iss_is_overhead():
+    try:
+        response = requests.get(
+            "https://api.wheretheiss.at/v1/satellites/25544",
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        iss_latitude = float(data["latitude"])
+        iss_longitude = float(data["longitude"])
+
+        latitude_close = abs(iss_latitude - MY_LAT) <= 5
+        longitude_close = abs(iss_longitude - MY_LONG) <= 5
+
+        return latitude_close and longitude_close
+
+    except (requests.RequestException, KeyError, ValueError) as error:
+        print("Could not retrieve ISS position:", error)
+        return False
+
+
+# ---------------------------- CHECK NIGHTTIME ---------------------------- #
+
+def is_night():
+    parameters = {
+        "lat": MY_LAT,
+        "lng": MY_LONG,
+        "formatted": 0
+    }
+
+    try:
+        response = requests.get(
+            "https://api.sunrise-sunset.org/json",
+            params=parameters,
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        if data.get("status") != "OK":
+            print("Sunrise-sunset API returned an error.")
+            return False
+
+        sunrise = datetime.fromisoformat(
+            data["results"]["sunrise"].replace("Z", "+00:00")
+        )
+        sunset = datetime.fromisoformat(
+            data["results"]["sunset"].replace("Z", "+00:00")
+        )
+
+        now = datetime.now(sunrise.tzinfo)
+
+        return now >= sunset or now <= sunrise
+
+    except (requests.RequestException, KeyError, ValueError) as error:
+        print("Could not retrieve sunrise/sunset:", error)
+        return False
+
+
+# ---------------------------- SEND EMAIL ---------------------------- #
+
+def send_email():
+    if not MY_EMAIL or not MY_PASSWORD:
+        print("Set MY_EMAIL and MY_PASSWORD before sending email.")
+        return
+
+    message = EmailMessage()
+    message["Subject"] = "Look Up! The ISS may be overhead!"
+    message["From"] = MY_EMAIL
+    message["To"] = MY_EMAIL
+    message.set_content(
+        "The International Space Station may be near your location "
+        "and it is nighttime. Look up at the sky!"
+    )
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as connection:
+            connection.login(MY_EMAIL, MY_PASSWORD)
+            connection.send_message(message)
+
+        print("Notification email sent!")
+
+    except (smtplib.SMTPException, OSError) as error:
+        print("Could not send email:", error)
+
+
+# ---------------------------- MAIN LOOP ---------------------------- #
+
+while True:
+    if iss_is_overhead() and is_night():
+        send_email()
+        sleep(60 * 60)  # Wait an hour to avoid repeated notifications
+    else:
+        print("ISS is not overhead at night right now.")
+        sleep(60)
+</code></pre>
+
+Day of 34 Code
+
+<pre><code>
+import tkinter as tk
+import requests
+import html
+
+# ---------------------------- CONSTANTS ------------------------------- #
+
+THEME_COLOR = "#375362"
+BACKGROUND_COLOR = "#F4F1DE"
+CORRECT_COLOR = "#4CAF50"
+WRONG_COLOR = "#E76F51"
+
+# ---------------------------- GET QUESTIONS ------------------------------- #
+
+def get_questions():
+    parameters = {
+        "amount": 10,
+        "type": "boolean"
+    }
+
+    try:
+        response = requests.get(
+            "https://opentdb.com/api.php",
+            params=parameters,
+            timeout=10
+        )
+        response.raise_for_status()
+
+        data = response.json()
+
+        if data["response_code"] != 0:
+            raise ValueError("Could not retrieve quiz questions.")
+
+        questions = data["results"]
+
+        for question in questions:
+            question["question"] = html.unescape(
+                question["question"]
+            )
+            question["correct_answer"] = html.unescape(
+                question["correct_answer"]
+            )
+
+        return questions
+
+    except (requests.RequestException, ValueError, KeyError) as error:
+        print("Error loading questions:", error)
+        return []
+
+
+# ---------------------------- QUIZ INTERFACE ------------------------------- #
+
+class QuizApp:
+
+    def __init__(self, questions):
+        self.window = tk.Tk()
+        self.window.title("Trivia Quiz")
+        self.window.config(
+            bg=BACKGROUND_COLOR,
+            padx=25,
+            pady=25
+        )
+        self.window.minsize(width=450, height=400)
+
+        self.questions = questions
+        self.question_number = 0
+        self.score = 0
+        self.answered = False
+
+        self.score_label = tk.Label(
+            text="Score: 0",
+            font=("Arial", 16, "bold"),
+            bg=BACKGROUND_COLOR,
+            fg=THEME_COLOR
+        )
+        self.score_label.pack(pady=10)
+
+        self.canvas = tk.Canvas(
+            width=400,
+            height=220,
+            bg="white",
+            highlightthickness=0
+        )
+        self.canvas.pack(pady=15)
+
+        self.question_text = self.canvas.create_text(
+            200,
+            110,
+            text="",
+            width=350,
+            font=("Arial", 17, "bold"),
+            fill=THEME_COLOR
+        )
+
+        self.feedback_label = tk.Label(
+            text="",
+            font=("Arial", 14),
+            bg=BACKGROUND_COLOR
+        )
+        self.feedback_label.pack(pady=5)
+
+        button_frame = tk.Frame(
+            self.window,
+            bg=BACKGROUND_COLOR
+        )
+        button_frame.pack(pady=10)
+
+        self.true_button = tk.Button(
+            button_frame,
+            text="True",
+            font=("Arial", 14),
+            width=12,
+            command=lambda: self.check_answer("True")
+        )
+        self.true_button.grid(row=0, column=0, padx=10)
+
+        self.false_button = tk.Button(
+            button_frame,
+            text="False",
+            font=("Arial", 14),
+            width=12,
+            command=lambda: self.check_answer("False")
+        )
+        self.false_button.grid(row=0, column=1, padx=10)
+
+        self.next_button = tk.Button(
+            self.window,
+            text="Next Question",
+            font=("Arial", 12),
+            command=self.next_question,
+            state="disabled"
+        )
+        self.next_button.pack(pady=10)
+
+        if self.questions:
+            self.show_question()
+        else:
+            self.end_quiz("No questions could be loaded.")
+
+        self.window.mainloop()
+
+    # ---------------------------- SHOW QUESTION ------------------------------- #
+
+    def show_question(self):
+        self.answered = False
+
+        question = self.questions[self.question_number]
+
+        self.canvas.itemconfig(
+            self.question_text,
+            text=question["question"]
+        )
+
+        self.canvas.config(bg="white")
+        self.feedback_label.config(text="")
+
+        self.true_button.config(state="normal")
+        self.false_button.config(state="normal")
+        self.next_button.config(state="disabled")
+
+    # ---------------------------- CHECK ANSWER ------------------------------- #
+
+    def check_answer(self, answer):
+        if self.answered:
+            return
+
+        self.answered = True
+
+        correct_answer = self.questions[
+            self.question_number
+        ]["correct_answer"]
+
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+
+        if answer == correct_answer:
+            self.score += 1
+            self.canvas.config(bg=CORRECT_COLOR)
+            self.feedback_label.config(
+                text="Correct!",
+                fg=CORRECT_COLOR
+            )
+        else:
+            self.canvas.config(bg=WRONG_COLOR)
+            self.feedback_label.config(
+                text=f"Wrong! The answer was {correct_answer}.",
+                fg=WRONG_COLOR
+            )
+
+        self.score_label.config(
+            text=f"Score: {self.score}/{self.question_number + 1}"
+        )
+
+        self.next_button.config(state="normal")
+
+        if self.question_number == len(self.questions) - 1:
+            self.next_button.config(text="See Results")
+
+    # ---------------------------- NEXT QUESTION ------------------------------- #
+
+    def next_question(self):
+        if not self.answered:
+            return
+
+        self.question_number += 1
+
+        if self.question_number < len(self.questions):
+            self.show_question()
+        else:
+            self.end_quiz(
+                f"Quiz complete!\nYour score: "
+                f"{self.score}/{len(self.questions)}"
+            )
+
+    # ---------------------------- END QUIZ ------------------------------- #
+
+    def end_quiz(self, message):
+        self.canvas.itemconfig(
+            self.question_text,
+            text=message
+        )
+
+        self.canvas.config(bg=BACKGROUND_COLOR)
+
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+        self.next_button.config(
+            text="Finish",
+            state="disabled"
+        )
+
+        self.feedback_label.config(
+            text="Thanks for playing!",
+            fg=THEME_COLOR
+        )
+
+
+# ---------------------------- RUN APP ------------------------------- #
+
+questions = get_questions()
+
+QuizApp(questions)
+</code></pre>
+
+Day of Code 34
+
+<pre><code>
+import tkinter as tk
+import requests
+import html
+
+# ---------------------------- CONSTANTS ------------------------------- #
+
+THEME_COLOR = "#375362"
+BACKGROUND_COLOR = "#F4F1DE"
+CORRECT_COLOR = "#4CAF50"
+WRONG_COLOR = "#E76F51"
+
+# ---------------------------- GET QUESTIONS ------------------------------- #
+
+def get_questions():
+    parameters = {
+        "amount": 10,
+        "type": "boolean"
+    }
+
+    try:
+        response = requests.get(
+            "https://opentdb.com/api.php",
+            params=parameters,
+            timeout=10
+        )
+        response.raise_for_status()
+
+        data = response.json()
+
+        if data["response_code"] != 0:
+            raise ValueError("Could not retrieve quiz questions.")
+
+        questions = data["results"]
+
+        for question in questions:
+            question["question"] = html.unescape(
+                question["question"]
+            )
+            question["correct_answer"] = html.unescape(
+                question["correct_answer"]
+            )
+
+        return questions
+
+    except (requests.RequestException, ValueError, KeyError) as error:
+        print("Error loading questions:", error)
+        return []
+
+
+# ---------------------------- QUIZ INTERFACE ------------------------------- #
+
+class QuizApp:
+
+    def __init__(self, questions):
+        self.window = tk.Tk()
+        self.window.title("Trivia Quiz")
+        self.window.config(
+            bg=BACKGROUND_COLOR,
+            padx=25,
+            pady=25
+        )
+        self.window.minsize(width=450, height=400)
+
+        self.questions = questions
+        self.question_number = 0
+        self.score = 0
+        self.answered = False
+
+        self.score_label = tk.Label(
+            text="Score: 0",
+            font=("Arial", 16, "bold"),
+            bg=BACKGROUND_COLOR,
+            fg=THEME_COLOR
+        )
+        self.score_label.pack(pady=10)
+
+        self.canvas = tk.Canvas(
+            width=400,
+            height=220,
+            bg="white",
+            highlightthickness=0
+        )
+        self.canvas.pack(pady=15)
+
+        self.question_text = self.canvas.create_text(
+            200,
+            110,
+            text="",
+            width=350,
+            font=("Arial", 17, "bold"),
+            fill=THEME_COLOR
+        )
+
+        self.feedback_label = tk.Label(
+            text="",
+            font=("Arial", 14),
+            bg=BACKGROUND_COLOR
+        )
+        self.feedback_label.pack(pady=5)
+
+        button_frame = tk.Frame(
+            self.window,
+            bg=BACKGROUND_COLOR
+        )
+        button_frame.pack(pady=10)
+
+        self.true_button = tk.Button(
+            button_frame,
+            text="True",
+            font=("Arial", 14),
+            width=12,
+            command=lambda: self.check_answer("True")
+        )
+        self.true_button.grid(row=0, column=0, padx=10)
+
+        self.false_button = tk.Button(
+            button_frame,
+            text="False",
+            font=("Arial", 14),
+            width=12,
+            command=lambda: self.check_answer("False")
+        )
+        self.false_button.grid(row=0, column=1, padx=10)
+
+        self.next_button = tk.Button(
+            self.window,
+            text="Next Question",
+            font=("Arial", 12),
+            command=self.next_question,
+            state="disabled"
+        )
+        self.next_button.pack(pady=10)
+
+        if self.questions:
+            self.show_question()
+        else:
+            self.end_quiz("No questions could be loaded.")
+
+        self.window.mainloop()
+
+    # ---------------------------- SHOW QUESTION ------------------------------- #
+
+    def show_question(self):
+        self.answered = False
+
+        question = self.questions[self.question_number]
+
+        self.canvas.itemconfig(
+            self.question_text,
+            text=question["question"]
+        )
+
+        self.canvas.config(bg="white")
+        self.feedback_label.config(text="")
+
+        self.true_button.config(state="normal")
+        self.false_button.config(state="normal")
+        self.next_button.config(state="disabled")
+
+    # ---------------------------- CHECK ANSWER ------------------------------- #
+
+    def check_answer(self, answer):
+        if self.answered:
+            return
+
+        self.answered = True
+
+        correct_answer = self.questions[
+            self.question_number
+        ]["correct_answer"]
+
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+
+        if answer == correct_answer:
+            self.score += 1
+            self.canvas.config(bg=CORRECT_COLOR)
+            self.feedback_label.config(
+                text="Correct!",
+                fg=CORRECT_COLOR
+            )
+        else:
+            self.canvas.config(bg=WRONG_COLOR)
+            self.feedback_label.config(
+                text=f"Wrong! The answer was {correct_answer}.",
+                fg=WRONG_COLOR
+            )
+
+        self.score_label.config(
+            text=f"Score: {self.score}/{self.question_number + 1}"
+        )
+
+        self.next_button.config(state="normal")
+
+        if self.question_number == len(self.questions) - 1:
+            self.next_button.config(text="See Results")
+
+    # ---------------------------- NEXT QUESTION ------------------------------- #
+
+    def next_question(self):
+        if not self.answered:
+            return
+
+        self.question_number += 1
+
+        if self.question_number < len(self.questions):
+            self.show_question()
+        else:
+            self.end_quiz(
+                f"Quiz complete!\nYour score: "
+                f"{self.score}/{len(self.questions)}"
+            )
+
+    # ---------------------------- END QUIZ ------------------------------- #
+
+    def end_quiz(self, message):
+        self.canvas.itemconfig(
+            self.question_text,
+            text=message
+        )
+
+        self.canvas.config(bg=BACKGROUND_COLOR)
+
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+        self.next_button.config(
+            text="Finish",
+            state="disabled"
+        )
+
+        self.feedback_label.config(
+            text="Thanks for playing!",
+            fg=THEME_COLOR
+        )
+
+
+# ---------------------------- RUN APP ------------------------------- #
+
+questions = get_questions()
+
+QuizApp(questions)
+</code></pre>
+
+Day 35 of Code
+
+<pre><code>
+import os
+import requests
+from twilio.rest import Client
+
+# ---------------------------- CONFIGURATION ------------------------------- #
+
+MY_LAT = 28.1235       # Replace with your latitude
+MY_LONG = -15.4363     # Replace with your longitude
+
+OWM_API_KEY = os.getenv("OWM_API_KEY")
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_FROM_NUMBER = os.getenv("TWILIO_FROM_NUMBER")
+TWILIO_TO_NUMBER = os.getenv("TWILIO_TO_NUMBER")
+
+OWM_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast"
+
+
+# ---------------------------- GET WEATHER DATA ------------------------------- #
+
+def will_rain():
+    if not OWM_API_KEY:
+        raise RuntimeError("Please set your OWM_API_KEY environment variable.")
+
+    parameters = {
+        "lat": MY_LAT,
+        "lon": MY_LONG,
+        "appid": OWM_API_KEY,
+        "units": "metric",
+    }
+
+    response = requests.get(
+        OWM_ENDPOINT,
+        params=parameters,
+        timeout=15
+    )
+    response.raise_for_status()
+
+    weather_data = response.json()
+
+    # Forecast entries are normally spaced three hours apart.
+    next_12_hours = weather_data.get("list", [])[:4]
+
+    if not next_12_hours:
+        raise ValueError("The API returned no forecast data.")
+
+    for forecast in next_12_hours:
+        for condition in forecast.get("weather", []):
+            weather_id = condition.get("id", 0)
+
+            # OpenWeather condition codes below 700 include
+            # thunderstorms, drizzle, rain, and snow.
+            if weather_id < 700:
+                return True
+
+    return False
+
+
+# ---------------------------- SEND SMS ------------------------------- #
+
+def send_sms():
+    required_values = [
+        TWILIO_ACCOUNT_SID,
+        TWILIO_AUTH_TOKEN,
+        TWILIO_FROM_NUMBER,
+        TWILIO_TO_NUMBER,
+    ]
+
+    if not all(required_values):
+        raise RuntimeError(
+            "Please set all four Twilio environment variables."
+        )
+
+    client = Client(
+        TWILIO_ACCOUNT_SID,
+        TWILIO_AUTH_TOKEN
+    )
+
+    message = client.messages.create(
+        body="☔ Rain or other precipitation is forecast. "
+             "Remember to check the weather before heading out!",
+        from_=TWILIO_FROM_NUMBER,
+        to=TWILIO_TO_NUMBER,
+    )
+
+    print("SMS submitted to Twilio. Message SID:", message.sid)
+
+
+# ---------------------------- MAIN PROGRAM ------------------------------- #
+
+def main():
+    try:
+        if will_rain():
+            print("Precipitation is forecast in the next 12 hours.")
+            send_sms()
+        else:
+            print("No precipitation detected in the checked forecast.")
+
+    except (requests.RequestException, ValueError, RuntimeError) as error:
+        print("Weather alert error:", error)
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+
+Day 36 of Code 
+
+<pre><code>
+import os
+import requests
+
+# ---------------------------- CONFIGURATION ------------------------------- #
+
+STOCK = "TSLA"
+COMPANY_NAME = "Tesla"
+
+ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+
+STOCK_ENDPOINT = "https://www.alphavantage.co/query"
+NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
+
+PERCENT_THRESHOLD = 5
+
+
+# ---------------------------- GET STOCK PRICES ------------------------------- #
+
+def get_stock_prices():
+    if not ALPHA_VANTAGE_API_KEY:
+        raise RuntimeError(
+            "Set the ALPHA_VANTAGE_API_KEY environment variable."
+        )
+
+    parameters = {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": STOCK,
+        "outputsize": "compact",
+        "apikey": ALPHA_VANTAGE_API_KEY,
+    }
+
+    response = requests.get(
+        STOCK_ENDPOINT,
+        params=parameters,
+        timeout=15
+    )
+    response.raise_for_status()
+
+    data = response.json()
+
+    if "Error Message" in data or "Note" in data:
+        raise RuntimeError(
+            f"Stock API response: {data.get('Error Message', data.get('Note'))}"
+        )
+
+    time_series = data.get("Time Series (Daily)")
+
+    if not time_series:
+        raise RuntimeError(
+            f"No stock prices returned. API response: {data}"
+        )
+
+    # Dates are sorted newest first.
+    sorted_dates = sorted(time_series.keys(), reverse=True)
+
+    if len(sorted_dates) < 2:
+        raise RuntimeError("Not enough stock-price history available.")
+
+    latest_date = sorted_dates[0]
+    previous_date = sorted_dates[1]
+
+    latest_close = float(
+        time_series[latest_date]["4. close"]
+    )
+    previous_close = float(
+        time_series[previous_date]["4. close"]
+    )
+
+    return (
+        latest_date,
+        latest_close,
+        previous_date,
+        previous_close,
+    )
+
+
+# ---------------------------- CALCULATE CHANGE ------------------------------- #
+
+def calculate_percentage_change(latest_close, previous_close):
+    if previous_close == 0:
+        raise ValueError("Previous closing price cannot be zero.")
+
+    difference = latest_close - previous_close
+
+    percentage_change = (
+        abs(difference) / previous_close
+    ) * 100
+
+    if difference > 0:
+        direction = "🔺"
+    elif difference < 0:
+        direction = "🔻"
+    else:
+        direction = "➡️"
+
+    return percentage_change, direction
+
+
+# ---------------------------- GET NEWS ------------------------------- #
+
+def get_company_news():
+    if not NEWS_API_KEY:
+        raise RuntimeError(
+            "Set the NEWS_API_KEY environment variable."
+        )
+
+    parameters = {
+        "q": COMPANY_NAME,
+        "language": "en",
+        "sortBy": "publishedAt",
+        "pageSize": 3,
+        "apiKey": NEWS_API_KEY,
+    }
+
+    response = requests.get(
+        NEWS_ENDPOINT,
+        params=parameters,
+        timeout=15
+    )
+    response.raise_for_status()
+
+    data = response.json()
+
+    if data.get("status") != "ok":
+        raise RuntimeError(
+            f"News API error: {data.get('message', 'Unknown error')}"
+        )
+
+    return data.get("articles", [])
+
+
+# ---------------------------- DISPLAY ALERT ------------------------------- #
+
+def display_news(percentage_change, direction, articles):
+    print("\n" + "=" * 45)
+    print(f"{COMPANY_NAME} ({STOCK}) STOCK NEWS ALERT")
+    print("=" * 45)
+
+    print(f"Stock movement: {direction} {percentage_change:.2f}%")
+    print(
+        "\nThis is an informational alert, "
+        "not a recommendation to buy or sell."
+    )
+
+    if not articles:
+        print("\nNo news articles were found.")
+        return
+
+    for index, article in enumerate(articles, start=1):
+        print(f"\nArticle {index}")
+        print(f"Headline: {article.get('title', 'No title')}")
+        print(f"Source: {article.get('source', {}).get('name', 'Unknown')}")
+        print(f"Summary: {article.get('description') or 'No summary available'}")
+        print(f"Link: {article.get('url', '')}")
+
+
+# ---------------------------- MAIN PROGRAM ------------------------------- #
+
+def main():
+    try:
+        latest_date, latest_close, previous_date, previous_close = (
+            get_stock_prices()
+        )
+
+        percentage_change, direction = calculate_percentage_change(
+            latest_close,
+            previous_close
+        )
+
+        print(f"Latest trading day: {latest_date}")
+        print(f"Previous trading day: {previous_date}")
+        print(f"Latest close: ${latest_close:.2f}")
+        print(f"Previous close: ${previous_close:.2f}")
+
+        if percentage_change >= PERCENT_THRESHOLD:
+            print("\nSignificant price movement detected!")
+
+            articles = get_company_news()
+
+            display_news(
+                percentage_change,
+                direction,
+                articles
+            )
+        else:
+            print(
+                f"\nPrice movement was below "
+                f"{PERCENT_THRESHOLD}%. No news alert needed."
+            )
+
+    except (requests.RequestException, RuntimeError, ValueError) as error:
+        print(f"\nError: {error}")
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
