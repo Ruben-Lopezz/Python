@@ -3311,3 +3311,272 @@ def main():
 
 main()
 </code></pre>
+
+Day 41 of Code
+
+<pre><code>
+
+def show_tasks():
+    if not tasks:
+        print("You don't have any tasks yet.")
+    else:
+        print("\nYour tasks:")
+        for i, task in enumerate(tasks, start=1):
+            status = "Completed" if task["completed"] else "Pending"
+            print(f"{i}. {task['name']} - {status}")
+
+def add_task():
+    name = input("Enter the task: ")
+    tasks.append({
+        "name": name,
+        "completed": False
+    })
+    print("Task added successfully!")
+
+def complete_task():
+    show_tasks()
+
+    if tasks:
+        try:
+            number = int(input("Enter the task number to complete: "))
+
+            if 1 <= number <= len(tasks):
+                tasks[number - 1]["completed"] = True
+                print("Task completed!")
+            else:
+                print("Invalid task number.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+def delete_task():
+    show_tasks()
+
+    if tasks:
+        try:
+            number = int(input("Enter the task number to delete: "))
+
+            if 1 <= number <= len(tasks):
+                removed_task = tasks.pop(number - 1)
+                print(f"Task '{removed_task['name']}' deleted!")
+            else:
+                print("Invalid task number.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+while True:
+    print("\n===== TO-DO LIST =====")
+    print("1. Show tasks")
+    print("2. Add task")
+    print("3. Complete task")
+    print("4. Delete task")
+    print("5. Exit")
+
+    option = input("Choose an option: ")
+
+    if option == "1":
+        show_tasks()
+    elif option == "2":
+        add_task()
+    elif option == "3":
+        complete_task()
+    elif option == "4":
+        delete_task()
+    elif option == "5":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option. Try again.")
+</code></pre>
+
+Day 42 of Code
+
+<pre><code>
+def add_expense():
+    try:
+        name = input("Enter the expense name: ")
+        amount = float(input("Enter the expense amount: "))
+
+        if amount <= 0:
+            print("The amount must be greater than zero.")
+            return
+
+        expenses.append({
+            "name": name,
+            "amount": amount
+        })
+
+        print("Expense added successfully!")
+
+    except ValueError:
+        print("Please enter a valid amount.")
+
+def show_expenses():
+    if not expenses:
+        print("You don't have any expenses yet.")
+        return
+
+    print("\n===== YOUR EXPENSES =====")
+
+    for i, expense in enumerate(expenses, start=1):
+        print(f"{i}. {expense['name']}: €{expense['amount']:.2f}")
+
+def calculate_total():
+    total = sum(expense["amount"] for expense in expenses)
+    print(f"Total expenses: €{total:.2f}")
+
+while True:
+    print("\n===== EXPENSE TRACKER =====")
+    print("1. Add expense")
+    print("2. Show expenses")
+    print("3. Calculate total")
+    print("4. Exit")
+
+    option = input("Choose an option: ")
+
+    if option == "1":
+        add_expense()
+    elif option == "2":
+        show_expenses()
+    elif option == "3":
+        calculate_total()
+    elif option == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option. Try again.")
+</code></pre>
+
+Day 43 of Code
+
+<pre><code>
+ 
+def add_contact():
+    name = input("Enter the contact name: ")
+    phone = input("Enter the phone number: ")
+    email = input("Enter the email address: ")
+
+    contacts[name] = {
+        "phone": phone,
+        "email": email
+    }
+
+    print("Contact added successfully!")
+
+def show_contacts():
+    if not contacts:
+        print("Your contact book is empty.")
+        return
+
+    print("\n===== CONTACT BOOK =====")
+
+    for name, details in contacts.items():
+        print(f"\nName: {name}")
+        print(f"Phone: {details['phone']}")
+        print(f"Email: {details['email']}")
+
+def search_contact():
+    name = input("Enter the name to search: ")
+
+    if name in contacts:
+        print("\nContact found!")
+        print(f"Name: {name}")
+        print(f"Phone: {contacts[name]['phone']}")
+        print(f"Email: {contacts[name]['email']}")
+    else:
+        print("Contact not found.")
+
+def delete_contact():
+    name = input("Enter the name to delete: ")
+
+    if name in contacts:
+        del contacts[name]
+        print("Contact deleted successfully!")
+    else:
+        print("Contact not found.")
+
+while True:
+    print("\n===== CONTACT BOOK MENU =====")
+    print("1. Add contact")
+    print("2. Show contacts")
+    print("3. Search contact")
+    print("4. Delete contact")
+    print("5. Exit")
+
+    option = input("Choose an option: ")
+
+    if option == "1":
+        add_contact()
+    elif option == "2":
+        show_contacts()
+    elif option == "3":
+        search_contact()
+    elif option == "4":
+        delete_contact()
+    elif option == "5":
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid option. Try again.")
+</code></pre>
+
+Day 44 of Code 
+
+<pre><code>
+
+def play_game():
+    print("\n===== NUMBER GUESSING GAME =====")
+    print("1. Easy (10 attempts)")
+    print("2. Medium (7 attempts)")
+    print("3. Hard (5 attempts)")
+
+    difficulty = input("Choose a difficulty: ")
+
+    if difficulty == "1":
+        attempts = 10
+    elif difficulty == "2":
+        attempts = 7
+    elif difficulty == "3":
+        attempts = 5
+    else:
+        print("Invalid difficulty.")
+        return
+
+    secret_number = random.randint(1, 100)
+
+    print("\nI'm thinking of a number between 1 and 100.")
+    print(f"You have {attempts} attempts to guess it!")
+
+    while attempts > 0:
+        try:
+            guess = int(input("\nEnter your guess: "))
+
+            if guess < 1 or guess > 100:
+                print("Choose a number between 1 and 100.")
+                continue
+
+            if guess == secret_number:
+                print("Congratulations! You guessed the number!")
+                return
+            elif guess < secret_number:
+                print("Too low!")
+            else:
+                print("Too high!")
+
+            attempts -= 1
+            print(f"Attempts remaining: {attempts}")
+
+        except ValueError:
+            print("Please enter a valid number.")
+
+    print(f"Game over! The number was {secret_number}.")
+
+while True:
+    play_game()
+
+    again = input("\nDo you want to play again? (yes/no): ").lower()
+
+    if again != "yes":
+        print("Thanks for playing!")
+        break
+</code></pre>
+
