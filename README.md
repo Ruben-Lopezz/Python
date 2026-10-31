@@ -1168,7 +1168,7 @@ class Scoreboard(Turtle):
     def game_over(self):
         self.goto(0, 0)
         self.write("GAME OVER", align="center", font=FONT)
-</pre></pre>code>
+</pre></pre>
  
 Day 24 of Code
 <pre><code>
