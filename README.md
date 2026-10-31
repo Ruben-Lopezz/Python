@@ -3110,3 +3110,312 @@ def main():
 if __name__ == "__main__":
     main()
 </code></pre>
+
+Day 37 of Code
+
+<pre><code>import random
+
+# Welcome message
+print("Welcome to the Number Guessing Game!")
+print("I'm thinking of a number between 1 and 100.")
+
+# Generate a random number
+secret_number = random.randint(1, 100)
+
+# Set the number of attempts
+attempts = 0
+max_attempts = 7
+
+print(f"You have {max_attempts} attempts to guess the number.")
+
+# Game loop
+while attempts < max_attempts:
+
+    guess = int(input("Make a guess: "))
+    attempts += 1
+
+    if guess < secret_number:
+        print("Too low! Try again.")
+
+    elif guess > secret_number:
+        print("Too high! Try again.")
+
+    else:
+        print("Congratulations! You guessed the number!")
+        print(f"The secret number was {secret_number}.")
+        print(f"You guessed it in {attempts} attempts!")
+        break
+
+# Check if the player ran out of attempts
+if attempts == max_attempts and guess != secret_number:
+    print("Game over! You ran out of attempts.")
+    print(f"The secret number was {secret_number}.")</code></pre>
+
+Day 38 of Code
+
+<pre><code># Day 38 - Quiz Game
+
+print("Welcome to the Python Quiz Game!")
+print("Answer the following questions.\n")
+
+questions = [
+    {
+        "question": "What is the capital of France?",
+        "options": ["A. London", "B. Paris", "C. Madrid"],
+        "answer": "B"
+    },
+    {
+        "question": "Which language are we learning?",
+        "options": ["A. Java", "B. C++", "C. Python"],
+        "answer": "C"
+    },
+    {
+        "question": "What is the result of 5 + 3?",
+        "options": ["A. 8", "B. 10", "C. 15"],
+        "answer": "A"
+    },
+    {
+        "question": "Which symbol is used for comments in Python?",
+        "options": ["A. //", "B. #", "C. &"],
+        "answer": "B"
+    },
+    {
+        "question": "Which function displays text on the screen?",
+        "options": ["A. input()", "B. print()", "C. int()"],
+        "answer": "B"
+    }
+]
+
+score = 0
+
+for question in questions:
+    print(question["question"])
+
+    for option in question["options"]:
+        print(option)
+
+    user_answer = input("Your answer (A, B or C): ").upper()
+
+    if user_answer == question["answer"]:
+        print("Correct answer!\n")
+        score += 1
+    else:
+        print("Incorrect answer!")
+        print(f"The correct answer was {question['answer']}.\n")
+
+print("Quiz finished!")
+print(f"Your final score is: {score}/{len(questions)}")
+
+if score == len(questions):
+    print("Excellent! You got everything right!")
+elif score >= 3:
+    print("Good job! Keep practising!")
+else:
+    print("Keep learning Python. You can do it!")</code></pre>
+
+Day 39 of Code
+
+<pre><code># Day 39 - Quiz Game with Categories
+
+print("Welcome to the Python Quiz Game!")
+print("Choose a category:\n")
+
+categories = {
+    "python": [
+        {
+            "question": "Which function displays text?",
+            "options": ["A. input()", "B. print()", "C. int()"],
+            "answer": "B"
+        },
+        {
+            "question": "Which symbol is used for comments?",
+            "options": ["A. #", "B. //", "C. &"],
+            "answer": "A"
+        }
+    ],
+
+    "general": [
+        {
+            "question": "What is the capital of France?",
+            "options": ["A. London", "B. Paris", "C. Rome"],
+            "answer": "B"
+        },
+        {
+            "question": "How many days are in a week?",
+            "options": ["A. 5", "B. 6", "C. 7"],
+            "answer": "C"
+        }
+    ],
+
+    "science": [
+        {
+            "question": "Which planet is known as the Red Planet?",
+            "options": ["A. Mars", "B. Venus", "C. Jupiter"],
+            "answer": "A"
+        },
+        {
+            "question": "What gas do plants absorb?",
+            "options": ["A. Oxygen", "B. Carbon dioxide", "C. Hydrogen"],
+            "answer": "B"
+        }
+    ]
+}
+
+print("Available categories:")
+print("1. Python")
+print("2. General Knowledge")
+print("3. Science")
+
+choice = input("\nChoose a category: ").lower()
+
+if choice == "1":
+    category = "python"
+elif choice == "2":
+    category = "general"
+elif choice == "3":
+    category = "science"
+else:
+    print("Invalid category!")
+    category = None
+
+score = 0
+
+if category:
+    questions = categories[category]
+
+    print(f"\nYou selected {category.title()}!")
+    print("Let's start!\n")
+
+    for question in questions:
+        print(question["question"])
+
+        for option in question["options"]:
+            print(option)
+
+        answer = input("Your answer: ").upper()
+
+        if answer == question["answer"]:
+            print("Correct!\n")
+            score += 1
+        else:
+            print("Incorrect!")
+            print(f"Correct answer: {question['answer']}\n")
+
+    print("Quiz finished!")
+    print(f"Your score: {score}/{len(questions)}")
+
+    percentage = (score / len(questions)) * 100
+
+    print(f"Your percentage: {percentage:.0f}%")
+
+    if percentage == 100:
+        print("Perfect score! Excellent!")
+    elif percentage >= 50:
+        print("Good job! Keep practising!")
+    else:
+        print("Keep learning. You can improve!")</code></pre>
+
+Day 40 of Code
+
+<pre><code># Day 40 - Password Manager
+
+import random
+import string
+import json
+from pathlib import Path
+
+DATA_FILE = Path("passwords.json")
+
+
+def generate_password(length=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(
+        random.choice(characters) for _ in range(length)
+    )
+    return password
+
+
+def load_passwords():
+    if DATA_FILE.exists():
+        try:
+            return json.loads(DATA_FILE.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            print("The data file is invalid.")
+    return {}
+
+
+def save_passwords(passwords):
+    DATA_FILE.write_text(
+        json.dumps(passwords, indent=4),
+        encoding="utf-8"
+    )
+
+
+def add_password(passwords):
+    website = input("Website name: ").strip()
+    username = input("Username or email: ").strip()
+
+    if not website or not username:
+        print("Website and username cannot be empty.")
+        return
+
+    length = int(input("Password length (minimum 12): "))
+
+    if length < 12:
+        print("Please choose at least 12 characters.")
+        return
+
+    password = generate_password(length)
+
+    passwords[website] = {
+        "username": username,
+        "password": password
+    }
+
+    save_passwords(passwords)
+
+    print("\nPassword generated and saved!")
+    print(f"Website: {website}")
+    print(f"Username: {username}")
+    print(f"Password: {password}")
+
+
+def view_passwords(passwords):
+    if not passwords:
+        print("No passwords saved yet.")
+        return
+
+    print("\nSaved accounts:")
+
+    for website, details in passwords.items():
+        print(f"\nWebsite: {website}")
+        print(f"Username: {details['username']}")
+        print("Password: [hidden]")
+
+
+def main():
+    passwords = load_passwords()
+
+    while True:
+        print("\n===== PASSWORD MANAGER =====")
+        print("1. Generate and save a password")
+        print("2. View saved accounts")
+        print("3. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            add_password(passwords)
+
+        elif choice == "2":
+            view_passwords(passwords)
+
+        elif choice == "3":
+            print("Goodbye!")
+            break
+
+        else:
+            print("Invalid option. Try again.")
+
+
+main()</code></pre>
