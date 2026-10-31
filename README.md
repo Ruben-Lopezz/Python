@@ -942,7 +942,7 @@ while program_active:
 </code></pre>
 
 Day 21 of Code
-<code><pre>
+<pre><code>
 from turtle import Turtle
 
 STARTING_POSITIONS = [(0, 0), (-20, 0), (-40, 0)]
@@ -1137,7 +1137,7 @@ class Scoreboard(Turtle):
     def r_point(self):
         self.r_score += 1
         self.update_scoreboard()
-</pre></pre>code>
+</pre></code>
  
 Day 23 of Code
 <pre><code>
@@ -1168,7 +1168,7 @@ class Scoreboard(Turtle):
     def game_over(self):
         self.goto(0, 0)
         self.write("GAME OVER", align="center", font=FONT)
-</pre></pre>
+</code></pre>
  
 Day 24 of Code
 <pre><code>
@@ -1186,7 +1186,7 @@ with open("./Input/Letters/starting_letter.txt") as letter_file:
             completed_letter.write(new_letter)
 
 print(f"Mail merge complete. Generated {len(names)} letters in ./Output/ReadyToSend/")
-</pre></pre>code>
+</code></pre>
 
 Day 25 of Code
 <pre><code>
@@ -1252,10 +1252,12 @@ while len(guessed_states) < 50:
         writer.write(answer_state, align="center", font=FONT)
  
 screen.exitonclick()
-
+</code></pre>
+ 
 Day of Code 26 
 
-<pre><code>import pandas
+<pre><code>
+import pandas
 
 data = pandas.read_csv("nato_phonetic_alphabet.csv")
 
@@ -1274,11 +1276,13 @@ try:
 except KeyError:
     print("Sorry, only letters in the alphabet please.")
 else:
-    print(output_list)</pre></code>
+    print(output_list)
+</code></pre>
 
 Day of Code 27
 
-<pre><code>from tkinter import *
+<pre><code>
+from tkinter import *
 
 # Window setup
 window = Tk()
@@ -1316,13 +1320,14 @@ calculate_button = Button(
 )
 calculate_button.grid(column=1, row=2)
 
-window.mainloop()</code></pre>
+window.mainloop()
+</code></pre>
 
 Day of Code 28
 
-<pre><code>import tkinter as tk
+<pre><code>
+import tkinter as tk
 
-# ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
 GREEN = "#9bdeac"
@@ -1334,7 +1339,6 @@ LONG_BREAK_MIN = 20
 reps = 0
 timer = None
 
-# ---------------------------- TIMER RESET ------------------------------- #
 def reset_timer():
     global reps, timer
 
@@ -1346,8 +1350,7 @@ def reset_timer():
     canvas.itemconfig(timer_text, text="00:00")
     title_label.config(text="Timer", fg=GREEN)
     check_marks.config(text="")
-
-# ---------------------------- TIMER MECHANISM ------------------------------- #
+ 
 def start_timer():
     global reps
 
@@ -1367,7 +1370,6 @@ def start_timer():
         count_down(work_seconds)
         title_label.config(text="Work", fg=GREEN)
 
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
     global timer
 
@@ -1396,7 +1398,6 @@ def count_down(count):
         start_timer()
 
 
-# ---------------------------- UI SETUP ------------------------------- #
 window = tk.Tk()
 window.title("Pomodoro")
 window.config(padx=100, pady=50, bg=YELLOW)
@@ -1416,7 +1417,6 @@ canvas = tk.Canvas(
     highlightthickness=0
 )
 
-# Simple timer illustration
 canvas.create_oval(
     25, 25, 175, 175,
     fill=GREEN,
@@ -1454,16 +1454,17 @@ check_marks = tk.Label(
 )
 check_marks.grid(column=1, row=3)
 
-window.mainloop()</code></pre>
+window.mainloop()
+</code></pre>
 
 Day 29 of Code
 
-<pre><code>from tkinter import *
+<pre><code>
+from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import string
 
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def generate_password():
     letters = string.ascii_letters
@@ -1482,12 +1483,9 @@ def generate_password():
     password_entry.delete(0, END)
     password_entry.insert(0, password)
 
-    # Copy generated password to clipboard
     window.clipboard_clear()
     window.clipboard_append(password)
 
-
-# ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def save_password():
     website = website_entry.get().strip()
@@ -1532,17 +1530,13 @@ def save_password():
         )
 
 
-# ---------------------------- UI SETUP ------------------------------- #
-
 window = Tk()
 window.title("Password Manager")
 window.config(padx=50, pady=50)
 
-# Canvas / Logo
 canvas = Canvas(width=200, height=200, highlightthickness=0)
 canvas.grid(column=1, row=0)
 
-# Simple lock illustration
 canvas.create_oval(
     65, 25, 135, 95,
     outline="#333333",
@@ -1564,7 +1558,6 @@ canvas.create_rectangle(
     outline="#333333"
 )
 
-# Website
 website_label = Label(text="Website:")
 website_label.grid(column=0, row=1, sticky="w")
 
@@ -1572,7 +1565,6 @@ website_entry = Entry(width=35)
 website_entry.grid(column=1, row=1, columnspan=2, sticky="w")
 website_entry.focus()
 
-# Email / Username
 email_label = Label(text="Email/Username:")
 email_label.grid(column=0, row=2, sticky="w")
 
@@ -1580,21 +1572,18 @@ email_entry = Entry(width=35)
 email_entry.grid(column=1, row=2, columnspan=2, sticky="w")
 email_entry.insert(0, "example@email.com")
 
-# Password
 password_label = Label(text="Password:")
 password_label.grid(column=0, row=3, sticky="w")
 
 password_entry = Entry(width=21)
 password_entry.grid(column=1, row=3, sticky="w")
 
-# Generate password button
 generate_button = Button(
     text="Generate Password",
     command=generate_password
 )
 generate_button.grid(column=2, row=3, sticky="w")
 
-# Add password button
 add_button = Button(
     text="Add",
     width=30,
@@ -1602,17 +1591,17 @@ add_button = Button(
 )
 add_button.grid(column=1, row=4, columnspan=2, sticky="w")
 
-window.mainloop()</code></pre>
+window.mainloop()
+</code></pre>
 
 Day 30 of Code
 
-<pre><code>from tkinter import *
+<pre><code>
+from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import string
 import json
-
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def generate_password():
     letters = string.ascii_letters
@@ -1634,8 +1623,6 @@ def generate_password():
     window.clipboard_clear()
     window.clipboard_append(password)
 
-
-# ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def save_password():
     website = website_entry.get().strip()
@@ -1671,7 +1658,6 @@ def save_password():
         )
         return
 
-    # Update existing data or add a new website
     data.update(new_data)
 
     try:
@@ -1693,8 +1679,6 @@ def save_password():
         message=f"Details saved for {website}."
     )
 
-
-# ---------------------------- FIND PASSWORD ------------------------------- #
 
 def find_password():
     website = website_entry.get().strip()
@@ -1741,13 +1725,10 @@ def find_password():
         )
 
 
-# ---------------------------- UI SETUP ------------------------------- #
-
 window = Tk()
 window.title("Password Manager")
 window.config(padx=40, pady=40)
 
-# Logo
 canvas = Canvas(width=180, height=180, highlightthickness=0)
 canvas.grid(column=1, row=0)
 
@@ -1768,7 +1749,6 @@ canvas.create_rectangle(
     fill="#333333"
 )
 
-# Website
 Label(text="Website:").grid(
     column=0, row=1, sticky="w"
 )
@@ -1786,7 +1766,6 @@ search_button = Button(
 )
 search_button.grid(column=2, row=1, sticky="w")
 
-# Email
 Label(text="Email/Username:").grid(
     column=0, row=2, sticky="w"
 )
@@ -1797,7 +1776,6 @@ email_entry.grid(
 )
 email_entry.insert(0, "example@email.com")
 
-# Password
 Label(text="Password:").grid(
     column=0, row=3, sticky="w"
 )
@@ -1815,7 +1793,6 @@ generate_button.grid(
     column=2, row=3, sticky="w"
 )
 
-# Add button
 add_button = Button(
     text="Add",
     width=33,
@@ -1825,7 +1802,8 @@ add_button.grid(
     column=1, row=4, columnspan=2, sticky="w"
 )
 
-window.mainloop()</code></pre>
+window.mainloop()
+</code></pre>
 
 Day 31 of Code
 
@@ -1835,8 +1813,6 @@ import pandas as pd
 import random
 from pathlib import Path
 
-# ---------------------------- CONSTANTS ------------------------------- #
-
 BACKGROUND_COLOR = "#B1DDC6"
 CARD_COLOR = "#FFFFFF"
 TITLE_COLOR = "#2C3E50"
@@ -1844,7 +1820,6 @@ TITLE_COLOR = "#2C3E50"
 DATA_FILE = Path("french_words.csv")
 PROGRESS_FILE = Path("words_to_learn.csv")
 
-# Sample vocabulary created automatically if no CSV exists
 SAMPLE_WORDS = [
     {"French": "partie", "English": "part"},
     {"French": "histoire", "English": "history"},
@@ -1863,8 +1838,6 @@ SAMPLE_WORDS = [
     {"French": "bonjour", "English": "hello"},
 ]
 
-# ---------------------------- LOAD DATA ------------------------------- #
-
 if not DATA_FILE.exists():
     pd.DataFrame(SAMPLE_WORDS).to_csv(DATA_FILE, index=False)
 
@@ -1881,8 +1854,6 @@ else:
 data = data.reset_index(drop=True)
 current_card = {}
 flip_timer = None
-
-# ---------------------------- NEXT CARD ------------------------------- #
 
 def next_card():
     global current_card, flip_timer
@@ -1925,8 +1896,6 @@ def next_card():
 
     flip_timer = window.after(3000, flip_card)
 
-# ---------------------------- FLIP CARD ------------------------------- #
-
 def flip_card():
     global flip_timer
     flip_timer = None
@@ -1949,15 +1918,12 @@ def flip_card():
         width=500
     )
 
-# ---------------------------- KNOWN WORD ------------------------------- #
-
 def known_word():
     global data
 
     if not current_card or data.empty:
         return
 
-    # Remove the learned word from the remaining vocabulary
     data = data[
         data["French"] != current_card["French"]
     ].reset_index(drop=True)
@@ -1966,8 +1932,6 @@ def known_word():
     data.to_csv(PROGRESS_FILE, index=False)
 
     next_card()
-
-# ---------------------------- UI SETUP ------------------------------- #
 
 window = tk.Tk()
 window.title("French Flash Cards")
@@ -2029,18 +1993,14 @@ from datetime import datetime
 from pathlib import Path
 from email.message import EmailMessage
 
-# ---------------------------- SETTINGS ------------------------------- #
-
 DATA_FILE = Path("birthdays.csv")
 
-# Set these as environment variables before running the program.
 MY_EMAIL = os.getenv("MY_EMAIL")
 MY_PASSWORD = os.getenv("MY_PASSWORD")
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 
-# ---------------------------- EMAIL TEMPLATES ------------------------------- #
 
 LETTER_TEMPLATES = [
     """Subject: Happy Birthday!
@@ -2085,7 +2045,6 @@ Your Birthday Bot
 """
 ]
 
-# ---------------------------- CHECK BIRTHDAYS ------------------------------- #
 
 def get_todays_birthdays():
     today = datetime.now()
@@ -2130,7 +2089,6 @@ def get_todays_birthdays():
 
     return birthdays
 
-# ---------------------------- CREATE EMAIL ------------------------------- #
 
 def create_birthday_email(name):
     template = random.choice(LETTER_TEMPLATES)
@@ -2146,7 +2104,6 @@ def create_birthday_email(name):
 
     return message
 
-# ---------------------------- SEND EMAIL ------------------------------- #
 
 def send_birthday_email(person):
     if not MY_EMAIL or not MY_PASSWORD:
@@ -2173,8 +2130,6 @@ def send_birthday_email(person):
         print(f"Could not email {person['name']}: {error}")
         return False
 
-# ---------------------------- MAIN PROGRAM ------------------------------- #
-
 def main():
     birthdays = get_todays_birthdays()
 
@@ -2199,16 +2154,12 @@ from datetime import datetime
 from email.message import EmailMessage
 from time import sleep
 
-# ---------------------------- YOUR LOCATION ---------------------------- #
-
 MY_LAT = 28.1235       # Replace with your latitude
 MY_LONG = -15.4363     # Replace with your longitude
 
 # Email settings: configure these as environment variables
 MY_EMAIL = os.getenv("MY_EMAIL")
 MY_PASSWORD = os.getenv("MY_PASSWORD")
-
-# ---------------------------- CHECK ISS POSITION ---------------------------- #
 
 def iss_is_overhead():
     try:
@@ -2231,8 +2182,6 @@ def iss_is_overhead():
         print("Could not retrieve ISS position:", error)
         return False
 
-
-# ---------------------------- CHECK NIGHTTIME ---------------------------- #
 
 def is_night():
     parameters = {
@@ -2270,8 +2219,6 @@ def is_night():
         return False
 
 
-# ---------------------------- SEND EMAIL ---------------------------- #
-
 def send_email():
     if not MY_EMAIL or not MY_PASSWORD:
         print("Set MY_EMAIL and MY_PASSWORD before sending email.")
@@ -2297,8 +2244,6 @@ def send_email():
         print("Could not send email:", error)
 
 
-# ---------------------------- MAIN LOOP ---------------------------- #
-
 while True:
     if iss_is_overhead() and is_night():
         send_email()
@@ -2315,14 +2260,10 @@ import tkinter as tk
 import requests
 import html
 
-# ---------------------------- CONSTANTS ------------------------------- #
-
 THEME_COLOR = "#375362"
 BACKGROUND_COLOR = "#F4F1DE"
 CORRECT_COLOR = "#4CAF50"
 WRONG_COLOR = "#E76F51"
-
-# ---------------------------- GET QUESTIONS ------------------------------- #
 
 def get_questions():
     parameters = {
@@ -2359,8 +2300,6 @@ def get_questions():
         print("Error loading questions:", error)
         return []
 
-
-# ---------------------------- QUIZ INTERFACE ------------------------------- #
 
 class QuizApp:
 
@@ -2451,8 +2390,6 @@ class QuizApp:
 
         self.window.mainloop()
 
-    # ---------------------------- SHOW QUESTION ------------------------------- #
-
     def show_question(self):
         self.answered = False
 
@@ -2469,8 +2406,6 @@ class QuizApp:
         self.true_button.config(state="normal")
         self.false_button.config(state="normal")
         self.next_button.config(state="disabled")
-
-    # ---------------------------- CHECK ANSWER ------------------------------- #
 
     def check_answer(self, answer):
         if self.answered:
@@ -2508,8 +2443,6 @@ class QuizApp:
         if self.question_number == len(self.questions) - 1:
             self.next_button.config(text="See Results")
 
-    # ---------------------------- NEXT QUESTION ------------------------------- #
-
     def next_question(self):
         if not self.answered:
             return
@@ -2523,8 +2456,6 @@ class QuizApp:
                 f"Quiz complete!\nYour score: "
                 f"{self.score}/{len(self.questions)}"
             )
-
-    # ---------------------------- END QUIZ ------------------------------- #
 
     def end_quiz(self, message):
         self.canvas.itemconfig(
@@ -2546,8 +2477,6 @@ class QuizApp:
             fg=THEME_COLOR
         )
 
-
-# ---------------------------- RUN APP ------------------------------- #
 
 questions = get_questions()
 
@@ -2561,14 +2490,10 @@ import tkinter as tk
 import requests
 import html
 
-# ---------------------------- CONSTANTS ------------------------------- #
-
 THEME_COLOR = "#375362"
 BACKGROUND_COLOR = "#F4F1DE"
 CORRECT_COLOR = "#4CAF50"
 WRONG_COLOR = "#E76F51"
-
-# ---------------------------- GET QUESTIONS ------------------------------- #
 
 def get_questions():
     parameters = {
@@ -2605,8 +2530,6 @@ def get_questions():
         print("Error loading questions:", error)
         return []
 
-
-# ---------------------------- QUIZ INTERFACE ------------------------------- #
 
 class QuizApp:
 
@@ -2697,8 +2620,6 @@ class QuizApp:
 
         self.window.mainloop()
 
-    # ---------------------------- SHOW QUESTION ------------------------------- #
-
     def show_question(self):
         self.answered = False
 
@@ -2716,7 +2637,6 @@ class QuizApp:
         self.false_button.config(state="normal")
         self.next_button.config(state="disabled")
 
-    # ---------------------------- CHECK ANSWER ------------------------------- #
 
     def check_answer(self, answer):
         if self.answered:
@@ -2754,7 +2674,6 @@ class QuizApp:
         if self.question_number == len(self.questions) - 1:
             self.next_button.config(text="See Results")
 
-    # ---------------------------- NEXT QUESTION ------------------------------- #
 
     def next_question(self):
         if not self.answered:
@@ -2769,8 +2688,6 @@ class QuizApp:
                 f"Quiz complete!\nYour score: "
                 f"{self.score}/{len(self.questions)}"
             )
-
-    # ---------------------------- END QUIZ ------------------------------- #
 
     def end_quiz(self, message):
         self.canvas.itemconfig(
@@ -2793,8 +2710,6 @@ class QuizApp:
         )
 
 
-# ---------------------------- RUN APP ------------------------------- #
-
 questions = get_questions()
 
 QuizApp(questions)
@@ -2807,8 +2722,6 @@ import os
 import requests
 from twilio.rest import Client
 
-# ---------------------------- CONFIGURATION ------------------------------- #
-
 MY_LAT = 28.1235       # Replace with your latitude
 MY_LONG = -15.4363     # Replace with your longitude
 
@@ -2820,8 +2733,6 @@ TWILIO_TO_NUMBER = os.getenv("TWILIO_TO_NUMBER")
 
 OWM_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast"
 
-
-# ---------------------------- GET WEATHER DATA ------------------------------- #
 
 def will_rain():
     if not OWM_API_KEY:
@@ -2843,7 +2754,6 @@ def will_rain():
 
     weather_data = response.json()
 
-    # Forecast entries are normally spaced three hours apart.
     next_12_hours = weather_data.get("list", [])[:4]
 
     if not next_12_hours:
@@ -2860,8 +2770,6 @@ def will_rain():
 
     return False
 
-
-# ---------------------------- SEND SMS ------------------------------- #
 
 def send_sms():
     required_values = [
@@ -2891,8 +2799,6 @@ def send_sms():
     print("SMS submitted to Twilio. Message SID:", message.sid)
 
 
-# ---------------------------- MAIN PROGRAM ------------------------------- #
-
 def main():
     try:
         if will_rain():
@@ -2915,8 +2821,6 @@ Day 36 of Code
 import os
 import requests
 
-# ---------------------------- CONFIGURATION ------------------------------- #
-
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla"
 
@@ -2928,8 +2832,6 @@ NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
 PERCENT_THRESHOLD = 5
 
-
-# ---------------------------- GET STOCK PRICES ------------------------------- #
 
 def get_stock_prices():
     if not ALPHA_VANTAGE_API_KEY:
@@ -2965,7 +2867,6 @@ def get_stock_prices():
             f"No stock prices returned. API response: {data}"
         )
 
-    # Dates are sorted newest first.
     sorted_dates = sorted(time_series.keys(), reverse=True)
 
     if len(sorted_dates) < 2:
@@ -2989,8 +2890,6 @@ def get_stock_prices():
     )
 
 
-# ---------------------------- CALCULATE CHANGE ------------------------------- #
-
 def calculate_percentage_change(latest_close, previous_close):
     if previous_close == 0:
         raise ValueError("Previous closing price cannot be zero.")
@@ -3010,8 +2909,6 @@ def calculate_percentage_change(latest_close, previous_close):
 
     return percentage_change, direction
 
-
-# ---------------------------- GET NEWS ------------------------------- #
 
 def get_company_news():
     if not NEWS_API_KEY:
@@ -3044,8 +2941,6 @@ def get_company_news():
     return data.get("articles", [])
 
 
-# ---------------------------- DISPLAY ALERT ------------------------------- #
-
 def display_news(percentage_change, direction, articles):
     print("\n" + "=" * 45)
     print(f"{COMPANY_NAME} ({STOCK}) STOCK NEWS ALERT")
@@ -3068,8 +2963,6 @@ def display_news(percentage_change, direction, articles):
         print(f"Summary: {article.get('description') or 'No summary available'}")
         print(f"Link: {article.get('url', '')}")
 
-
-# ---------------------------- MAIN PROGRAM ------------------------------- #
 
 def main():
     try:
@@ -3113,22 +3006,19 @@ if __name__ == "__main__":
 
 Day 37 of Code
 
-<pre><code>import random
+<pre><code>
+import random
 
-# Welcome message
 print("Welcome to the Number Guessing Game!")
 print("I'm thinking of a number between 1 and 100.")
 
-# Generate a random number
 secret_number = random.randint(1, 100)
 
-# Set the number of attempts
 attempts = 0
 max_attempts = 7
 
 print(f"You have {max_attempts} attempts to guess the number.")
 
-# Game loop
 while attempts < max_attempts:
 
     guess = int(input("Make a guess: "))
@@ -3146,14 +3036,13 @@ while attempts < max_attempts:
         print(f"You guessed it in {attempts} attempts!")
         break
 
-# Check if the player ran out of attempts
 if attempts == max_attempts and guess != secret_number:
     print("Game over! You ran out of attempts.")
     print(f"The secret number was {secret_number}.")</code></pre>
 
 Day 38 of Code
 
-<pre><code># Day 38 - Quiz Game
+<pre><code>
 
 print("Welcome to the Python Quiz Game!")
 print("Answer the following questions.\n")
@@ -3211,11 +3100,12 @@ if score == len(questions):
 elif score >= 3:
     print("Good job! Keep practising!")
 else:
-    print("Keep learning Python. You can do it!")</code></pre>
+    print("Keep learning Python. You can do it!")
+</code></pre>
 
 Day 39 of Code
 
-<pre><code># Day 39 - Quiz Game with Categories
+<pre><code>
 
 print("Welcome to the Python Quiz Game!")
 print("Choose a category:\n")
@@ -3313,11 +3203,12 @@ if category:
     elif percentage >= 50:
         print("Good job! Keep practising!")
     else:
-        print("Keep learning. You can improve!")</code></pre>
+        print("Keep learning. You can improve!")
+</code></pre>
 
 Day 40 of Code
 
-<pre><code># Day 40 - Password Manager
+<pre><code>
 
 import random
 import string
@@ -3418,4 +3309,5 @@ def main():
             print("Invalid option. Try again.")
 
 
-main()</code></pre>
+main()
+</code></pre>
