@@ -1185,7 +1185,7 @@ with open("./Input/Letters/starting_letter.txt") as letter_file:
         with open(f"./Output/ReadyToSend/letter_for_{name}.txt", mode="w") as completed_letter:
             completed_letter.write(new_letter)
 
-print(f"Mail merge complete. Generated {len(names)} letters in ./Output/ReadyToSend/")
+print("Mail merge complete. Generated {len(names)} letters in ./Output/ReadyToSend/")
 </code></pre>
 
 Day 25 of Code
@@ -3580,3 +3580,132 @@ while True:
         break
 </code></pre>
 
+Day 45 of Code
+<pre><code>
+import requests
+from bs4 import BeautifulSoup
+
+URL = "https://web.archive.org/web/20200518073855/https://www.empireonline.com/movies/features/best-movies-2/"
+
+headers = {
+    "User-Agent": "Mozilla/5.0"
+}
+
+response = requests.get(URL, headers=headers, timeout=30)
+response.raise_for_status()
+
+soup = BeautifulSoup(response.text, "html.parser")
+
+all_movies = soup.select("h3.title")
+
+movie_titles = [movie.get_text(strip=True) for movie in all_movies]
+
+movie_titles.reverse()
+
+if len(movie_titles) != 100:
+    raise ValueError(
+        f"Expected 100 movies, but found {len(movie_titles)}. "
+        "Check the archived webpage or its HTML structure."
+    )
+
+with open("movies.txt", mode="w", encoding="utf-8") as file:
+    for index, movie in enumerate(movie_titles, start=1):
+        file.write(f"{index}) {movie}\n")
+
+print("Your movie list has been successfully created!")
+print(f"Total movies saved: {len(movie_titles)}")
+print("Check the movies.txt file.")
+</code></pre>
+
+Day 46 of Code 
+
+<pre><code>
+import requests
+import csv
+from datetime import datetime
+
+date = input(
+    "Which date do you want to travel to? "
+    "Enter YYYY-MM-DD: "
+).strip()
+
+try:
+    datetime.strptime(date, "%Y-%m-%d")
+except ValueError:
+    raise ValueError("Invalid date! Use YYYY-MM-DD.")
+
+URL = (
+    "https://raw.githubusercontent.com/"
+    "mhollingshead/billboard-hot-100/main/date/"
+    f"{date}.json"
+)
+
+print("\nDownloading Billboard chart...")
+
+try:
+    response = requests.get(URL, timeout=30)
+    response.raise_for_status()
+    chart = response.json()
+
+except requests.exceptions.HTTPError:
+    raise SystemExit(
+        "Chart not found! Check that the date is a valid "
+        "Billboard chart release date."
+    )
+
+except requests.exceptions.RequestException as error:
+    raise SystemExit(f"Connection error: {error}")
+
+except ValueError:
+    raise SystemExit("The server returned invalid JSON.")
+
+if chart.get("date") != date:
+    raise SystemExit("The returned chart date does not match.")
+
+songs = chart.get("data", [])
+
+if len(songs) != 100:
+    raise SystemExit(
+        f"Expected 100 songs, but found {len(songs)}."
+    )
+
+songs.sort(key=lambda song: song["this_week"])
+
+filename = f"billboard_{date}.csv"
+
+with open(filename, "w", newline="", encoding="utf-8") as file:
+
+    writer = csv.writer(file)
+
+    writer.writerow([
+        "Position",
+        "Song",
+        "Artist",
+        "Last Week",
+        "Peak Position",
+        "Weeks on Chart"
+    ])
+
+    for song in songs:
+        writer.writerow([
+            song["this_week"],
+            song["song"],
+            song["artist"],
+            song["last_week"],
+            song["peak_position"],
+            song["weeks_on_chart"]
+        ])
+
+print("\nBILLBOARD HOT 100")
+print(f"Chart date: {date}")
+print("-" * 50)
+
+for song in songs:
+    print(
+        f"{song['this_week']}. "
+        f"{song['song']} - {song['artist']}"
+    )
+
+print("\nSUCCESS!")
+print(f"100 songs saved in {filename}")
+</code></pre>
